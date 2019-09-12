@@ -1,0 +1,43 @@
+{
+  "name": "fastify-react",
+  "version": "0.0.0",
+  "description": "seamlessly integrate fastify and react, for high performance SSR",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap -R classic --no-esm test/*.test.js"
+  },
+  "keywords": [
+    "fastify",
+    "react",
+    "performance",
+    "server",
+    "side",
+    "rendering"
+  ],
+  "author": "David Mark Clements (@davidmarkclem)",
+  "license": "MIT",
+  "devDependencies": {
+    "fastify": "^2.8.0",
+    "mock-require": "^3.0.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-router": "^5.0.1",
+    "standard": "^14.2.0",
+    "tap": "^14.6.2"
+  },
+  "dependencies": {
+    "fastify-plugin": "^1.6.0",
+    "history": "^4.10.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidmarkclements/fastify-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidmarkclements/fastify-react/issues"
+  },
+  "homepage": "https://github.com/davidmarkclements/fastify-react#readme"
+}
