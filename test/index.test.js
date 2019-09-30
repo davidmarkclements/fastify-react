@@ -1,14 +1,15 @@
 'use strict'
 const { test } = require('tap')
 const Fastify = require('fastify')
-const { join } = require('path')
 const { createElement } = require('react')
-const mockRequire = require('mock-require')
-const fastifyReact = require('..')
+const { MODE = 'default' } = process.env
+const fastifyReact = MODE === 'webpack'
+  ? require('./fixtures/webpack-build').importFastifyReact()
+  : (MODE === 'parcel' ? require('./fixtures/parcel-build') : require('..'))
 
 test('basic', async ({ is }) => {
   const fastify = Fastify()
-  
+
   const html = (app) => `
     <!DOCTYPE html>
     <html>
@@ -19,12 +20,11 @@ test('basic', async ({ is }) => {
     </body>
     </html>
   `
-  const root = join(__dirname, 'dummy.js')
-  require.cache[root] = {}
   const Component = () => {
     return createElement('div', null, 'test')
   }
-  mockRequire(require.resolve(root), Component)
+  const root = mock(Component)
+
   fastify.register(fastifyReact, { html, root })
 
   const res = await fastify.inject({
@@ -35,4 +35,13 @@ test('basic', async ({ is }) => {
   is(res.headers['content-type'], 'text/html; charset=utf-8')
   is(res.body, html('<div data-reactroot="">test</div>'))
   fastify.close()
+  mock.undo()
 })
+
+function mock (Component) {
+  // since nothing else will require this file, we use its
+  // existence on the file system to house mocked Component modules
+  require.cache[__filename] = { exports: Component }
+  return __filename
+}
+mock.undo = () => { require.cache[__filename] = module }

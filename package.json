@@ -4,7 +4,12 @@
   "description": "seamlessly integrate fastify and react, for high performance SSR",
   "main": "index.js",
   "scripts": {
-    "test": "tap -R classic --no-esm test/*.test.js"
+    "test": "npm run test-default && npm run test-webpack && npm run test-parcel",
+    "test-default": "tap -R classic --no-esm test/*.test.js",
+    "test-webpack": "npm run fixture-webpack && MODE=webpack tap -R classic --no-cov --no-esm test/*.test.js",
+    "test-parcel": "npm run fixture-parcel && MODE=parcel tap -R classic --no-cov --no-esm test/*.test.js",
+    "fixture-webpack": "webpack --target=node --mode=production -o test/fixtures/webpack-build.js index.js",
+    "fixture-parcel": "parcel build index.js -o parcel-build.js -d test/fixtures --no-cache --no-source-maps --no-minify -t node"
   },
   "keywords": [
     "fastify",
@@ -17,13 +22,17 @@
   "author": "David Mark Clements (@davidmarkclem)",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
     "fastify": "^2.8.0",
-    "mock-require": "^3.0.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router": "^5.0.1",
     "standard": "^14.2.0",
-    "tap": "^14.6.2"
+    "tap": "^14.6.2",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "fastify-plugin": "^1.6.0",
